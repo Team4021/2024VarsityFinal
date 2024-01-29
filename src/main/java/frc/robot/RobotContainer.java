@@ -6,9 +6,10 @@ package frc.robot;
 
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Autos;
-import frc.robot.commands.ExampleCommand;
 import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.ExampleSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.WristSubsystem;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj2.command.Command;
@@ -26,8 +27,10 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final ExampleSubsystem m_exampleSubsystem = new ExampleSubsystem();
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  private final WristSubsystem m_wrist = new WristSubsystem();
+  private final ShooterSubsystem m_shoot = new ShooterSubsystem();
+  private final IntakeSubsystem m_intake = new IntakeSubsystem();
 
   // Joysticks
   private final CommandJoystick m_strafeController =
@@ -64,6 +67,12 @@ private final JoystickButton m_rightTrigger =
   private final JoystickButton m_leftButton4 =
       new JoystickButton(m_strafeGenericHID, 4);;
 
+  public void configMotors(){
+    m_wrist.configWristMotor();
+    m_intake.configIntakeMotor();
+    m_shoot.configShootMotor();
+  }
+
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
     // Configure the trigger bindings
@@ -95,6 +104,9 @@ private final JoystickButton m_rightTrigger =
     m_leftButton3.whileTrue(new RunCommand(
         () -> m_robotDrive.setX(),
         m_robotDrive));
+    m_rightButton3.whileTrue(new RunCommand(
+        () -> m_intake.runIntake(),
+        m_intake));
   }
 
   /**
@@ -102,8 +114,8 @@ private final JoystickButton m_rightTrigger =
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
+//   public Command getAutonomousCommand() {
     // An example command will be run in autonomous
-    return Autos.exampleAuto(m_exampleSubsystem);
-  }
+    // return Autos;
+//   }
 }

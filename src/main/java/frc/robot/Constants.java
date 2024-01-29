@@ -62,6 +62,8 @@ public final class Constants {
     public static final int kFrontRightTurningCanId = 14;
     public static final int kRearRightTurningCanId = 16;
 
+
+
     // CANcoder CAN IDs
     public static final int kFrontLeftTurningCANcoderId = 20;
     public static final int kRearLeftTurningCANcoderId = 22;
@@ -114,6 +116,8 @@ public final class Constants {
     public static final double kTurningMinOutput = -1;
     public static final double kTurningMaxOutput = 1;
 
+
+
     public static final IdleMode kDrivingMotorIdleMode = IdleMode.kBrake;
     public static final IdleMode kTurningMotorIdleMode = IdleMode.kBrake;
 
@@ -144,5 +148,32 @@ public final class Constants {
 
   public static final class NeoMotorConstants {
     public static final double kFreeSpeedRpm = 5676;
+  }
+  public static final class ManipConstants {
+
+    public static final double kWristP = 0.01;
+    public static final double kWristI = 0;
+    public static final double kWristD = 0;
+    public static final double kWristFF = 0;
+    public static final double kWristMinOutput = -1;
+    public static final double kWristMaxOutput = 1;
+
+    public static final double kShootP = 0.01;
+    public static final double kShootI = 0;
+    public static final double kShootD = 0;
+    public static final double kShootFF = 0;
+    public static final double kShootMinOutput = -1;
+    public static final double kShootMaxOutput = 1;
+
+    public static final double kIntakeP = 0.01;
+    public static final double kIntakeI = 0;
+    public static final double kIntakeD = 0;
+    public static final double kIntakeFF = 0;
+    public static final double kIntakeMinOutput = -1;
+    public static final double kIntakeMaxOutput = 1;
+
+    public static final int kIntakeMotor = 28;
+    public static final int kShootMotor = 29;
+    public static final int kWristMotor = 31;
   }
 }
