@@ -33,20 +33,19 @@ public class SwerveModule {
   private final SparkPIDController m_turningPIDController;
 
   private double m_chassisAngularOffset = 0.0;
+  private double angle;
+  private double m_cancoderOffset;
   
   private SwerveModuleState m_desiredState = new SwerveModuleState(0.0, new Rotation2d());
 
-  public Double getStartPosition() {
-    StatusSignal<Double> absolutePosition = m_turningAbsoluteEncoder.getAbsolutePosition();
-    return absolutePosition.getValue();
-  }
+
   /**
    * Constructs a SwerveModule and configures the driving and turning motor,
    * encoder, and PID controller. This configuration is specific to the MK4I
    * Swerve Module built with NEOs, SPARKS MAX, and a Through Bore
    * Encoder.
    */
-  public SwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset, int turningCANcoderId) {
+  public SwerveModule(int drivingCANId, int turningCANId, double chassisAngularOffset, int turningCANcoderId, double cancoderOffset) {
     m_drivingSparkMax = new CANSparkMax(drivingCANId, MotorType.kBrushless);
     m_turningSparkMax = new CANSparkMax(turningCANId, MotorType.kBrushless);
 
@@ -59,7 +58,6 @@ public class SwerveModule {
     m_turningAbsoluteEncoder = new CANcoder(turningCANcoderId);
     m_drivingEncoder = m_drivingSparkMax.getEncoder();
     m_turningEncoder = m_turningSparkMax.getEncoder();
-    m_turningEncoder.setPosition(getStartPosition());
     m_drivingPIDController = m_drivingSparkMax.getPIDController();
     m_turningPIDController = m_turningSparkMax.getPIDController();
     m_drivingPIDController.setFeedbackDevice(m_drivingEncoder);
@@ -120,6 +118,7 @@ public class SwerveModule {
     m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
     m_drivingEncoder.setPosition(0);
+    resetToAbsolutePosition();
   }
 
   /**
@@ -172,5 +171,10 @@ public class SwerveModule {
   /** Zeroes all the SwerveModule encoders. */
   public void resetEncoders() {
     m_drivingEncoder.setPosition(0);
+  }
+
+  public void resetToAbsolutePosition() {
+    angle = m_turningAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() - m_cancoderOffset;
+    m_turningEncoder.setPosition(angle);
   }
 }

@@ -8,6 +8,7 @@ import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Autos;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.LimelightSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
 import frc.robot.subsystems.WristSubsystem;
 import edu.wpi.first.math.MathUtil;
@@ -30,7 +31,8 @@ public class RobotContainer {
   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final WristSubsystem m_wrist = new WristSubsystem();
   private final ShooterSubsystem m_shoot = new ShooterSubsystem();
-  private final IntakeSubsystem m_intake = new IntakeSubsystem();
+  public final IntakeSubsystem m_intake = new IntakeSubsystem();
+  public final LimelightSubsystem m_limelights = new LimelightSubsystem();
 
   // Joysticks
   private final CommandJoystick m_strafeController =
@@ -65,7 +67,7 @@ private final JoystickButton m_rightTrigger =
   private final JoystickButton m_rightButton5 =
       new JoystickButton(m_turnGenericHID, 5);
   private final JoystickButton m_leftButton4 =
-      new JoystickButton(m_strafeGenericHID, 4);;
+      new JoystickButton(m_strafeGenericHID, 4);
 
   public void configMotors(){
     m_wrist.configWristMotor();
@@ -106,6 +108,9 @@ private final JoystickButton m_rightTrigger =
         m_robotDrive));
     m_rightButton3.whileTrue(new RunCommand(
         () -> m_intake.runIntake(),
+        m_intake));
+    m_rightButton4.whileTrue(new RunCommand(
+        () -> m_intake.reverseIntake(),
         m_intake));
   }
 

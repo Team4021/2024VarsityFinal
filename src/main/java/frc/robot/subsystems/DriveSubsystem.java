@@ -26,25 +26,29 @@ public class DriveSubsystem extends SubsystemBase {
       DriveConstants.kFrontLeftDrivingCanId,
       DriveConstants.kFrontLeftTurningCanId,
       DriveConstants.kFrontLeftChassisAngularOffset,
-      DriveConstants.kFrontLeftTurningCANcoderId);
+      DriveConstants.kFrontLeftTurningCANcoderId,
+      DriveConstants.kFrontLeftTurningCANcoderOffset);
 
   private final SwerveModule m_frontRight = new SwerveModule(
       DriveConstants.kFrontRightDrivingCanId,
       DriveConstants.kFrontRightTurningCanId,
       DriveConstants.kFrontRightChassisAngularOffset,
-      DriveConstants.kFrontRightTurningCANcoderId);
+      DriveConstants.kFrontRightTurningCANcoderId,
+      DriveConstants.kFrontRightTurningCANcoderOffset);
 
   private final SwerveModule m_rearLeft = new SwerveModule(
       DriveConstants.kRearLeftDrivingCanId,
       DriveConstants.kRearLeftTurningCanId,
       DriveConstants.kBackLeftChassisAngularOffset,
-      DriveConstants.kRearLeftTurningCANcoderId);
+      DriveConstants.kRearLeftTurningCANcoderId,
+      DriveConstants.kRearLeftTurningCANcoderOffset);
 
   private final SwerveModule m_rearRight = new SwerveModule(
       DriveConstants.kRearRightDrivingCanId,
       DriveConstants.kRearRightTurningCanId,
       DriveConstants.kBackRightChassisAngularOffset,
-      DriveConstants.kRearRightTurningCANcoderId);
+      DriveConstants.kRearRightTurningCANcoderId,
+      DriveConstants.kRearRightTurningCANcoderOffset);
 
   // The gyro sensor
   private final Pigeon2 m_gyro = new Pigeon2(30);

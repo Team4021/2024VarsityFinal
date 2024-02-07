@@ -35,9 +35,9 @@ public final class Constants {
     public static final double kRotationalSlewRate = 2.0; // percent per second (1 = 100%)
 
     // Chassis configuration
-    public static final double kTrackWidth = Units.inchesToMeters(26.5);//CHANGE
+    public static final double kTrackWidth = Units.inchesToMeters(22.75);//CHANGE
     // Distance between centers of right and left wheels on robot
-    public static final double kWheelBase = Units.inchesToMeters(26.5);//CHANGE
+    public static final double kWheelBase = Units.inchesToMeters(22.75);//CHANGE
     // Distance between front and back wheels on robot
     public static final SwerveDriveKinematics kDriveKinematics = new SwerveDriveKinematics(
         new Translation2d(kWheelBase / 2, kTrackWidth / 2),
@@ -69,6 +69,11 @@ public final class Constants {
     public static final int kRearLeftTurningCANcoderId = 22;
     public static final int kFrontRightTurningCANcoderId = 24;
     public static final int kRearRightTurningCANcoderId = 26;
+
+    public static final double kFrontLeftTurningCANcoderOffset = 0;
+    public static final double kRearLeftTurningCANcoderOffset = 0;
+    public static final double kFrontRightTurningCANcoderOffset = 0;
+    public static final double kRearRightTurningCANcoderOffset = 0;
 
 
     public static final int kGyro = 30;
