@@ -6,13 +6,10 @@ package frc.robot;
 
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Autos;
-import frc.robot.subsystems.DriveSubsystem;
-import frc.robot.subsystems.IntakeSubsystem;
-import frc.robot.subsystems.LimelightSubsystem;
-import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.WristSubsystem;
+import frc.robot.subsystems.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
 import edu.wpi.first.wpilibj2.command.button.CommandJoystick;
@@ -28,11 +25,11 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-  private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final WristSubsystem m_wrist = new WristSubsystem();
+//   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
   private final ShooterSubsystem m_shoot = new ShooterSubsystem();
   public final IntakeSubsystem m_intake = new IntakeSubsystem();
-  public final LimelightSubsystem m_limelights = new LimelightSubsystem();
+  public final LimelightTags m_limelightTags = new LimelightTags();
+  public final LimelightNotes m_limelightNotes = new LimelightNotes();
 
   // Joysticks
   private final CommandJoystick m_strafeController =
@@ -70,7 +67,6 @@ private final JoystickButton m_rightTrigger =
       new JoystickButton(m_strafeGenericHID, 4);
 
   public void configMotors(){
-    m_wrist.configWristMotor();
     m_intake.configIntakeMotor();
     m_shoot.configShootMotor();
   }
@@ -81,16 +77,28 @@ private final JoystickButton m_rightTrigger =
     configureBindings();
 
       // Configure default commands
-    m_robotDrive.setDefaultCommand(
-      // The left stick controls translation of the robot.
-      // Turning is controlled by the X axis of the right stick.
-      new RunCommand(
-          () -> m_robotDrive.drive(
-              -MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband),
-              -MathUtil.applyDeadband(-m_strafeController.getX(), OIConstants.kJoystickDeadband),
-              -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
-              true, true),
-          m_robotDrive));
+    // m_robotDrive.setDefaultCommand(
+    //   // The left stick controls translation of the robot.
+    //   // Turning is controlled by the X axis of the right stick.
+    //   new RunCommand(
+    //       () -> m_robotDrive.drive(
+    //           -MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband),
+    //           -MathUtil.applyDeadband(-m_strafeController.getX(), OIConstants.kJoystickDeadband),
+    //           -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
+    //           true, true),
+    //       m_robotDrive));
+    m_intake.setDefaultCommand(
+        new RunCommand(
+            () -> m_intake.noRunIntake(),
+             m_intake));
+    m_limelightNotes.setDefaultCommand(
+        new RunCommand(
+            () -> m_limelightNotes.defaultCommand(),
+            m_limelightNotes));
+    m_shoot.setDefaultCommand(
+        new RunCommand(
+            () -> m_shoot.noRunshoot(), m_shoot)
+    );
   }
 
   /**
@@ -103,15 +111,26 @@ private final JoystickButton m_rightTrigger =
    * joysticks}.
    */
   private void configureBindings() {
-    m_leftButton3.whileTrue(new RunCommand(
-        () -> m_robotDrive.setX(),
-        m_robotDrive));
+    // m_leftButton3.whileTrue(new RunCommand(
+    //     () -> m_robotDrive.setX(),
+    //     m_robotDrive));
     m_rightButton3.whileTrue(new RunCommand(
         () -> m_intake.runIntake(),
         m_intake));
+    // m_rightButton3.whileTrue(new RunCommand(
+    //     () -> m_robotDrive.drive(
+    //           -MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband),
+    //           m_limelightNotes.changeXspeed(-MathUtil.applyDeadband(-m_strafeController.getX(), OIConstants.kJoystickDeadband)),
+    //           -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
+    //           true, true),
+    //       m_robotDrive));
     m_rightButton4.whileTrue(new RunCommand(
         () -> m_intake.reverseIntake(),
         m_intake));
+    m_rightTrigger.whileTrue(new RunCommand(
+        () -> m_shoot.shoot(),
+        m_shoot));
+        
   }
 
   /**

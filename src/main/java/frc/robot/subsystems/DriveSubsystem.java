@@ -13,6 +13,7 @@ import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
@@ -80,6 +81,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
+    resetAbsolute();
   }
 
   @Override
@@ -133,6 +135,8 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
     
+    SmartDashboard.putNumber("xSpeed", ySpeed);
+
     double xSpeedCommanded;
     double ySpeedCommanded;
 
@@ -255,5 +259,11 @@ public class DriveSubsystem extends SubsystemBase {
   public double getTurnRate() {
     StatusSignal<Double> m_AngVelZ = m_gyro.getAngularVelocityZDevice();
     return m_AngVelZ.getValue() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+  }
+  public void resetAbsolute(){
+    m_frontLeft.resetToAbsolutePosition();
+    m_rearLeft.resetToAbsolutePosition();
+    m_frontRight.resetToAbsolutePosition();
+    m_rearRight.resetToAbsolutePosition();
   }
 }
