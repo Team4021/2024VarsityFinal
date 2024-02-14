@@ -42,22 +42,38 @@ public class LimelightNotes extends SubsystemBase{
         SmartDashboard.putBoolean("isNote?", isNote());
     }
 
-    public double changeXspeed(double inputSpeed){
-
-        double outputSpeed;
+    public double changeYSpeed(double inputSpeed){
+        double outputYSpeed;
         if (isNote()==true){
             if (getX()<-10){
-                outputSpeed = inputSpeed-1;
+                outputYSpeed = 0.5;
             } else if (getX()>10){
-                outputSpeed = inputSpeed+1;
+                outputYSpeed = 0.5;
             } else{
-                outputSpeed = inputSpeed;
+                outputYSpeed = 1;
             }
         } else{
-            outputSpeed = inputSpeed;
+            outputYSpeed = inputSpeed;
         }
 
-        return outputSpeed;
+        return outputYSpeed;
+    }
+
+    public double changeXspeed(double inputSpeed){
+        double outputXSpeed;
+        if (isNote()==true){
+            if (getX()<-10){
+                outputXSpeed = -1;
+            } else if (getX()>10){
+                outputXSpeed = 1;
+            } else{
+                outputXSpeed = 0;
+            }
+        } else{
+            outputXSpeed = inputSpeed;
+        }
+
+        return outputXSpeed;
     }
 
 }

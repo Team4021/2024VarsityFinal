@@ -72,7 +72,7 @@ public final class Constants {
 
     public static final double kFrontLeftTurningCANcoderOffset = 0;
     public static final double kRearLeftTurningCANcoderOffset = 0;
-    public static final double kFrontRightTurningCANcoderOffset = 0;
+    public static final double kFrontRightTurningCANcoderOffset = -0.184814453125;
     public static final double kRearRightTurningCANcoderOffset = 0;
 
 

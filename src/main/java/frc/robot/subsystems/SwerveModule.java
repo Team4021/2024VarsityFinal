@@ -7,6 +7,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 
 import com.revrobotics.CANSparkMax;
 import com.revrobotics.MotorFeedbackSensor;
@@ -72,7 +73,7 @@ public class SwerveModule {
     // Apply position and velocity conversion factors for the turning encoder. We
     // want these in radians and radians per second to use with WPILib's swerve
     // APIs.
-    m_turningEncoder.setPositionConversionFactor(ModuleConstants.kTurningEncoderPositionFactor);
+    m_turningEncoder.setPositionConversionFactor(/*ModuleConstants.kTurningEncoderPositionFactor*/ 0.2932153046);
     m_turningEncoder.setVelocityConversionFactor(ModuleConstants.kTurningEncoderVelocityFactor);
 
     // Invert the turning encoder, since the output shaft rotates in the opposite direction of
@@ -85,8 +86,8 @@ public class SwerveModule {
     // to 10 degrees will go through 0 rather than the other direction which is a
     // longer route.
     m_turningPIDController.setPositionPIDWrappingEnabled(true);
-    m_turningPIDController.setPositionPIDWrappingMinInput(ModuleConstants.kTurningEncoderPositionPIDMinInput);
-    m_turningPIDController.setPositionPIDWrappingMaxInput(ModuleConstants.kTurningEncoderPositionPIDMaxInput);
+    m_turningPIDController.setPositionPIDWrappingMinInput(/*ModuleConstants.kTurningEncoderPositionPIDMinInput*/-Math.PI * (150 / 7));
+    m_turningPIDController.setPositionPIDWrappingMaxInput(/*ModuleConstants.kTurningEncoderPositionPIDMaxInput*/Math.PI * (150 / 7));
 
     // Set the PID gains for the driving motor. Note these are example gains, and you
     // may need to tune them for your own robot!
@@ -116,10 +117,10 @@ public class SwerveModule {
     m_drivingSparkMax.burnFlash();
     m_turningSparkMax.burnFlash();
 
+    m_cancoderOffset = cancoderOffset;
     m_chassisAngularOffset = chassisAngularOffset;
     m_desiredState.angle = new Rotation2d(m_turningEncoder.getPosition());
     m_drivingEncoder.setPosition(0);
-    resetToAbsolutePosition();
   }
 
   /**
@@ -153,6 +154,7 @@ public class SwerveModule {
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
+    SmartDashboard.putNumber("encoder value", m_turningEncoder.getPosition());
     // Apply chassis angular offset to the desired state.
     SwerveModuleState correctedDesiredState = new SwerveModuleState();
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
@@ -175,7 +177,7 @@ public class SwerveModule {
   }
 
   public void resetToAbsolutePosition() {
-    angle = m_turningAbsoluteEncoder.getAbsolutePosition().getValueAsDouble() - m_cancoderOffset;
+    angle = -((Math.PI * 2) / (150 / 7)) * m_turningAbsoluteEncoder.getAbsolutePosition().getValueAsDouble();
     m_turningEncoder.setPosition(angle);
   }
 }

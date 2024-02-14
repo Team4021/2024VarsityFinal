@@ -48,6 +48,8 @@ public class ShooterSubsystem extends SubsystemBase {
     public void shoot(){
         m_shootMotor.set(-0.6);
         m_shootMotor2.set(0.6);
+    }
+    public void intermediate(){
         m_intermediate.set(0.6);
     }
 }

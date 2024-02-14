@@ -29,14 +29,12 @@ public class IntakeSubsystem extends SubsystemBase {
     }
     public void noRunIntake(){
         // m_intakePIDController.setReference(0, ControlType.kVelocity);
-        SmartDashboard.putBoolean("testintake", false);
         m_intakeMotor.set(0);
         m_intakeSpeed = (0.0);
 
     }
     public void runIntake(){
         // m_intakePIDController.setReference(0.5, ControlType.kVelocity);
-        SmartDashboard.putBoolean("testintake", true);
         m_intakeMotor.set(0.3);
         m_intakeSpeed = (0.3);
     }

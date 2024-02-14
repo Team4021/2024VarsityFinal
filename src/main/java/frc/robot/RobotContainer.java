@@ -25,8 +25,8 @@ import edu.wpi.first.wpilibj2.command.button.Trigger;
  */
 public class RobotContainer {
   // The robot's subsystems and commands are defined here...
-//   private final DriveSubsystem m_robotDrive = new DriveSubsystem();
-  private final ShooterSubsystem m_shoot = new ShooterSubsystem();
+  public final DriveSubsystem m_robotDrive = new DriveSubsystem();
+  public final ShooterSubsystem m_shoot = new ShooterSubsystem();
   public final IntakeSubsystem m_intake = new IntakeSubsystem();
   public final LimelightTags m_limelightTags = new LimelightTags();
   public final LimelightNotes m_limelightNotes = new LimelightNotes();
@@ -77,16 +77,16 @@ private final JoystickButton m_rightTrigger =
     configureBindings();
 
       // Configure default commands
-    // m_robotDrive.setDefaultCommand(
-    //   // The left stick controls translation of the robot.
-    //   // Turning is controlled by the X axis of the right stick.
-    //   new RunCommand(
-    //       () -> m_robotDrive.drive(
-    //           -MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband),
-    //           -MathUtil.applyDeadband(-m_strafeController.getX(), OIConstants.kJoystickDeadband),
-    //           -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
-    //           true, true),
-    //       m_robotDrive));
+    m_robotDrive.setDefaultCommand(
+      // The left stick controls translation of the robot.
+      // Turning is controlled by the X axis of the right stick.
+      new RunCommand(
+          () -> m_robotDrive.drive(
+              -MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband),
+              -MathUtil.applyDeadband(m_strafeController.getX(), OIConstants.kJoystickDeadband),
+              -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
+              false, true),
+          m_robotDrive));
     m_intake.setDefaultCommand(
         new RunCommand(
             () -> m_intake.noRunIntake(),
@@ -111,25 +111,32 @@ private final JoystickButton m_rightTrigger =
    * joysticks}.
    */
   private void configureBindings() {
-    // m_leftButton3.whileTrue(new RunCommand(
-    //     () -> m_robotDrive.setX(),
-    //     m_robotDrive));
+    m_leftButton3.whileTrue(new RunCommand(
+        () -> m_robotDrive.setX(),
+        m_robotDrive));
     m_rightButton3.whileTrue(new RunCommand(
         () -> m_intake.runIntake(),
         m_intake));
-    // m_rightButton3.whileTrue(new RunCommand(
-    //     () -> m_robotDrive.drive(
-    //           -MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband),
-    //           m_limelightNotes.changeXspeed(-MathUtil.applyDeadband(-m_strafeController.getX(), OIConstants.kJoystickDeadband)),
-    //           -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
-    //           true, true),
-    //       m_robotDrive));
+    m_rightButton3.whileTrue(new RunCommand(
+        () -> m_robotDrive.drive(
+              m_limelightNotes.changeYSpeed(-MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband)),
+              m_limelightNotes.changeXspeed(-MathUtil.applyDeadband(-m_strafeController.getX(), OIConstants.kJoystickDeadband)),
+              -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
+              false, true),
+          m_robotDrive));
     m_rightButton4.whileTrue(new RunCommand(
         () -> m_intake.reverseIntake(),
         m_intake));
     m_rightTrigger.whileTrue(new RunCommand(
         () -> m_shoot.shoot(),
-        m_shoot));
+        m_shoot)
+        .withTimeout(0.2)
+        .andThen(new RunCommand(
+        () -> m_shoot.intermediate(),
+        m_shoot))
+        );
+    m_leftButton5.whileTrue(new RunCommand(
+        () -> m_robotDrive.resetAbsolute(), m_robotDrive));
         
   }
 
