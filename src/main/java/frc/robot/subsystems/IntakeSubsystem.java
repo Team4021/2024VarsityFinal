@@ -18,7 +18,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void configIntakeMotor(){
         m_intakeMotor.restoreFactoryDefaults();
-        m_intakeMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
+        m_intakeMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
         // m_intakePIDController = m_intakeMotor.getPIDController();
         // m_intakePIDController.setP(ManipConstants.kIntakeP);
         // m_intakePIDController.setI(ManipConstants.kIntakeI);
@@ -33,14 +33,11 @@ public class IntakeSubsystem extends SubsystemBase {
         m_intakeSpeed = (0.0);
 
     }
-    public void runIntake(){
+    public void runIntake(double speed){
+
         // m_intakePIDController.setReference(0.5, ControlType.kVelocity);
-        m_intakeMotor.set(0.3);
-        m_intakeSpeed = (0.3);
+        m_intakeMotor.set(speed);
+
     }
-    public void reverseIntake(){
-        // m_intakePIDController.setReference(-0.5, ControlType.kVelocity);
-        m_intakeMotor.set(-0.3);
-        m_intakeSpeed = (-0.3);
-    }
+
 }

@@ -15,6 +15,7 @@ public class ShooterSubsystem extends SubsystemBase {
     CANSparkMax m_shootMotor = new CANSparkMax(ManipConstants.kShootMotor, MotorType.kBrushless);
     CANSparkMax m_shootMotor2 = new CANSparkMax(33, MotorType.kBrushless);
     CANSparkMax m_intermediate = new CANSparkMax(35, MotorType.kBrushless);
+    CANSparkMax m_intermediate2 = new CANSparkMax(37, MotorType.kBrushless);
 
 
     // private SparkPIDController m_shootPIDController;
@@ -34,7 +35,6 @@ public class ShooterSubsystem extends SubsystemBase {
         // m_shootPIDController.setReference(0, ControlType.kVelocity);
         m_shootMotor.set(0);
         m_shootMotor2.set(0);
-        m_intermediate.set(0);
     }
     public void runAmp(){
         // m_shootPIDController.setReference(0.5, ControlType.kVelocity);
@@ -45,11 +45,9 @@ public class ShooterSubsystem extends SubsystemBase {
     public void reverseShoot(){
         // m_shootPIDController.setReference(-0.5, ControlType.kVelocity);
     }
-    public void shoot(){
-        m_shootMotor.set(-0.6);
-        m_shootMotor2.set(0.6);
+    public void shoot(double speed){
+        m_shootMotor.set(-speed);
+        m_shootMotor2.set(speed);
     }
-    public void intermediate(){
-        m_intermediate.set(0.6);
-    }
+  
 }

@@ -82,8 +82,8 @@ private final JoystickButton m_rightTrigger =
       // Turning is controlled by the X axis of the right stick.
       new RunCommand(
           () -> m_robotDrive.drive(
-              -MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband),
-              -MathUtil.applyDeadband(m_strafeController.getX(), OIConstants.kJoystickDeadband),
+              -MathUtil.applyDeadband(m_strafeController.getY(), OIConstants.kJoystickDeadband),
+              MathUtil.applyDeadband(m_strafeController.getX(), OIConstants.kJoystickDeadband),
               -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
               false, true),
           m_robotDrive));
@@ -115,25 +115,20 @@ private final JoystickButton m_rightTrigger =
         () -> m_robotDrive.setX(),
         m_robotDrive));
     m_rightButton3.whileTrue(new RunCommand(
-        () -> m_intake.runIntake(),
+        () -> m_intake.runIntake(0.3),
         m_intake));
-    m_rightButton3.whileTrue(new RunCommand(
-        () -> m_robotDrive.drive(
-              m_limelightNotes.changeYSpeed(-MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband)),
-              m_limelightNotes.changeXspeed(-MathUtil.applyDeadband(-m_strafeController.getX(), OIConstants.kJoystickDeadband)),
-              -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
-              false, true),
-          m_robotDrive));
-    m_rightButton4.whileTrue(new RunCommand(
-        () -> m_intake.reverseIntake(),
-        m_intake));
+    // m_rightButton3.whileTrue(new RunCommand(
+    //     () -> m_robotDrive.drive(
+    //           m_limelightNotes.changeYSpeed(-MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband)),
+    //           m_limelightNotes.changeXspeed(-MathUtil.applyDeadband(-m_strafeController.getX(), OIConstants.kJoystickDeadband)),
+    //           -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
+    //           false, true),
+    //       m_robotDrive));
     m_rightTrigger.whileTrue(new RunCommand(
-        () -> m_shoot.shoot(),
-        m_shoot)
-        .withTimeout(0.2)
-        .andThen(new RunCommand(
-        () -> m_shoot.intermediate(),
-        m_shoot))
+        () -> m_shoot.shoot(1),
+         m_shoot) //       .andThen(new RunCommand(
+        // () -> m_shoot.intermediate(),
+        // m_shoot))
         );
     m_leftButton5.whileTrue(new RunCommand(
         () -> m_robotDrive.resetAbsolute(), m_robotDrive));

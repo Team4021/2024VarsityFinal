@@ -34,6 +34,7 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_robotContainer.configMotors();
+
     // m_robotContainer.m_robotDrive.resetAbsolute();
     // limelight3 = CameraServer.startAutomaticCapture();
   }
@@ -56,7 +57,9 @@ public class Robot extends TimedRobot {
 
   /** This function is called once each time the robot enters Disabled mode. */
   @Override
-  public void disabledInit() {}
+  public void disabledInit() {
+        m_robotContainer.m_robotDrive.resetAbsolute();
+  }
 
   @Override
   public void disabledPeriodic() {}
