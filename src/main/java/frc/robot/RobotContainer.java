@@ -6,6 +6,8 @@ package frc.robot;
 
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Autos;
+import frc.robot.commands.Intake;
+import frc.robot.commands.Shoot;
 import frc.robot.subsystems.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.GenericHID;
@@ -30,6 +32,7 @@ public class RobotContainer {
   public final IntakeSubsystem m_intake = new IntakeSubsystem();
   public final LimelightTags m_limelightTags = new LimelightTags();
   public final LimelightNotes m_limelightNotes = new LimelightNotes();
+  public final IntermediateSubsystem m_inter = new IntermediateSubsystem();
 
   // Joysticks
   private final CommandJoystick m_strafeController =
@@ -99,6 +102,11 @@ private final JoystickButton m_rightTrigger =
         new RunCommand(
             () -> m_shoot.noRunshoot(), m_shoot)
     );
+    m_inter.setDefaultCommand(
+        new RunCommand(
+            () -> m_inter.noRunIntermediate(), m_inter
+        )
+    );
   }
 
   /**
@@ -114,9 +122,7 @@ private final JoystickButton m_rightTrigger =
     m_leftButton3.whileTrue(new RunCommand(
         () -> m_robotDrive.setX(),
         m_robotDrive));
-    m_rightButton3.whileTrue(new RunCommand(
-        () -> m_intake.runIntake(0.3),
-        m_intake));
+    m_rightButton3.whileTrue(new Intake(m_inter, m_intake));
     // m_rightButton3.whileTrue(new RunCommand(
     //     () -> m_robotDrive.drive(
     //           m_limelightNotes.changeYSpeed(-MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband)),
@@ -124,12 +130,11 @@ private final JoystickButton m_rightTrigger =
     //           -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
     //           false, true),
     //       m_robotDrive));
-    m_rightTrigger.whileTrue(new RunCommand(
-        () -> m_shoot.shoot(1),
-         m_shoot) //       .andThen(new RunCommand(
+    m_rightTrigger.whileTrue(new Shoot(m_shoot, m_inter, m_intake));
+         //       .andThen(new RunCommand(
         // () -> m_shoot.intermediate(),
         // m_shoot))
-        );
+        
     m_leftButton5.whileTrue(new RunCommand(
         () -> m_robotDrive.resetAbsolute(), m_robotDrive));
         

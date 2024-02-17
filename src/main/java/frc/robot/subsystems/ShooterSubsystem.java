@@ -14,8 +14,7 @@ public class ShooterSubsystem extends SubsystemBase {
 
     CANSparkMax m_shootMotor = new CANSparkMax(ManipConstants.kShootMotor, MotorType.kBrushless);
     CANSparkMax m_shootMotor2 = new CANSparkMax(33, MotorType.kBrushless);
-    CANSparkMax m_intermediate = new CANSparkMax(35, MotorType.kBrushless);
-    CANSparkMax m_intermediate2 = new CANSparkMax(37, MotorType.kBrushless);
+    
 
 
     // private SparkPIDController m_shootPIDController;
