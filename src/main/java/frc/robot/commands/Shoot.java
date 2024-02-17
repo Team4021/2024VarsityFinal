@@ -20,10 +20,15 @@ public class Shoot extends Command{
 
     public void execute(){
 
-        new RunCommand(() -> m_shoot.shoot(0.8), m_shoot)
-        .withTimeout(0.3)
-        .andThen(new RunCommand(() -> m_inter.runIntermediate(1), m_inter))
-        .andThen(new RunCommand(() -> m_intake.runIntake(0.3), m_intake));
+        // new RunCommand(() -> m_shoot.shoot(0.8), m_shoot)
+        // .withTimeout(0.3)
+        // .andThen(new RunCommand(() -> m_inter.runIntermediate(1), m_inter))
+        // .andThen(new RunCommand(() -> m_intake.runIntake(0.3), m_intake));
+
+        m_shoot.shoot(1);
+
+        m_inter.runIntermediate(1);
+        m_intake.runIntake(0.3);
 
     }
     public boolean isFinished(){

@@ -7,7 +7,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.IntermediateSubsystem;
 
 public class Intake extends Command{
-    // private DigitalInput m_limitSwitch = new DigitalInput(0);
+    private DigitalInput m_limitSwitch = new DigitalInput(0);
     private final IntermediateSubsystem m_inter;
     private final IntakeSubsystem m_intake;
     public Intake(IntermediateSubsystem m_inter, IntakeSubsystem m_intake){
@@ -18,13 +18,13 @@ public class Intake extends Command{
     }
 
     public void execute(){
-        // if (m_limitSwitch.get() == false){
-            m_intake.runIntake(0.3);
-            m_inter.runIntermediate(0.3);
-        // } else if (m_limitSwitch.get() == true){
-        //     m_intake.noRunIntake();
-        //     m_inter.noRunIntermediate();
-        // }
+        if (m_limitSwitch.get() == false){
+            m_intake.runIntake(0.4);
+            m_inter.runIntermediate(0.2);
+        } else if (m_limitSwitch.get() == true){
+            m_intake.noRunIntake();
+            m_inter.noRunIntermediate();
+        }
     }
 
     public boolean isFinished(){

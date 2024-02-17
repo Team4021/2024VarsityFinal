@@ -91,6 +91,11 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
+    m_frontLeft.encodersToDashboard("FL");
+    m_frontRight.encodersToDashboard("FR");
+    m_rearLeft.encodersToDashboard("RL");
+    m_rearRight.encodersToDashboard("RR");
+    
   }
 
   /**

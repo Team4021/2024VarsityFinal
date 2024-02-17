@@ -88,7 +88,7 @@ private final JoystickButton m_rightTrigger =
               -MathUtil.applyDeadband(m_strafeController.getY(), OIConstants.kJoystickDeadband),
               MathUtil.applyDeadband(m_strafeController.getX(), OIConstants.kJoystickDeadband),
               -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
-              false, true),
+              true, true),
           m_robotDrive));
     m_intake.setDefaultCommand(
         new RunCommand(
@@ -125,17 +125,23 @@ private final JoystickButton m_rightTrigger =
     m_rightButton3.whileTrue(new Intake(m_inter, m_intake));
     // m_rightButton3.whileTrue(new RunCommand(
     //     () -> m_robotDrive.drive(
-    //           m_limelightNotes.changeYSpeed(-MathUtil.applyDeadband(-m_strafeController.getY(), OIConstants.kJoystickDeadband)),
-    //           m_limelightNotes.changeXspeed(-MathUtil.applyDeadband(-m_strafeController.getX(), OIConstants.kJoystickDeadband)),
+    //           m_limelightNotes.changeYSpeed(-MathUtil.applyDeadband(m_strafeController.getY(), OIConstants.kJoystickDeadband)),
+    //           m_limelightNotes.changeXspeed(MathUtil.applyDeadband(m_strafeController.getX(), OIConstants.kJoystickDeadband)),
     //           -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
     //           false, true),
     //       m_robotDrive));
-    m_rightTrigger.whileTrue(new Shoot(m_shoot, m_inter, m_intake));
+    // m_rightTrigger.whileTrue(new Shoot(m_shoot, m_inter, m_intake));
          //       .andThen(new RunCommand(
         // () -> m_shoot.intermediate(),
         // m_shoot))
+    m_rightTrigger.whileTrue(new RunCommand(() -> m_shoot.shoot(1), m_shoot)
+        .withTimeout(0.5)
+        .andThen(new RunCommand(() -> m_inter.runIntermediate(1), m_inter))
+        .andThen(new RunCommand(() -> m_intake.runIntake(0.3), m_intake)));
+    m_leftButton6.onTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+
         
-    m_leftButton5.whileTrue(new RunCommand(
+    m_leftButton5.onTrue(new RunCommand(
         () -> m_robotDrive.resetAbsolute(), m_robotDrive));
         
   }

@@ -136,7 +136,7 @@ public class SwerveModule {
   }
 
   /**
-   * Returns the current position of the module.
+   * Returns the current position of the module. 
    *
    * @return The current position of the module.
    */
@@ -177,7 +177,11 @@ public class SwerveModule {
   }
 
   public void resetToAbsolutePosition() {
-    angle = -((Math.PI * 2) / (150 / 7)) * m_turningAbsoluteEncoder.getAbsolutePosition().getValueAsDouble();
+    angle = -(Math.PI * 2) * m_turningAbsoluteEncoder.getAbsolutePosition().getValueAsDouble();
     m_turningEncoder.setPosition(angle);
+  }
+  public void encodersToDashboard(String module){
+    SmartDashboard.putNumber(module + "absolute", m_turningAbsoluteEncoder.getAbsolutePosition().getValueAsDouble());
+    SmartDashboard.putNumber(module + "motor", m_turningEncoder.getPosition());
   }
 }
