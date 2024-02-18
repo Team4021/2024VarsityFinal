@@ -141,15 +141,15 @@ private final JoystickButton m_rightTrigger =
         .withTimeout(1)
         .andThen(new RunCommand(() -> m_inter.runIntermediate(1), m_inter))
         .andThen(new RunCommand(() -> m_intake.runIntake(0.3), m_intake)));
-    m_leftButton6.onTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
+    m_leftButton6.whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
         
-    m_leftButton5.onTrue(new RunCommand(
+    m_leftButton5.whileTrue(new RunCommand(
         () -> m_robotDrive.resetAbsolute(), m_robotDrive));
     // m_leftButton7.whileTrue(new RunCommand(() -> m_shoot.angleShooter(), m_shoot));
-    m_leftButton4.onTrue(new RunCommand(
+    m_leftButton4.whileTrue(new RunCommand(
         () -> m_shoot.angleShooterClose(), m_shoot));
-    m_leftButton5.onTrue(new RunCommand(
+    m_leftButton5.whileTrue(new RunCommand(
         () -> m_shoot.angleShooterFar(), m_shoot));
   }
 
@@ -158,9 +158,27 @@ private final JoystickButton m_rightTrigger =
    *
    * @return the command to run in autonomous
    */
-  public Command getAutonomousCommand() {
-    // An example command will be run in autonomous
+//   public Command getAutonomousCommand() {
+//     // An example command will be run in autonomous
 
-    return Autos.turnAuto(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
-  }
+//     return Autos.turnAuto(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
+//   }
+    public Command getAutonomousCommand(String m_chooser) {
+        // An example command will be run in autonomous
+        // return Autos.exampleAuto(m_exampleSubsystem);
+        // if(m_chooser == "autoBalance"){
+        // return Autos.balanceAuto(m_robotDrive, m_armSub, m_intakeSub);
+        if(m_chooser == "Straight"){
+            return Autos.straightAuto(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
+        } else if(m_chooser == "ThreeBlue"){
+            return Autos.turnAutoBlue(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
+        } else if(m_chooser == "ThreeRed"){
+            return Autos.turnAutoRed(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
+        // } else if(m_chooser == "CableSide"){
+        // return Autos.longDriveAuto(m_robotDrive, m_armSub, m_intakeSub);
+        } else{
+            return Autos.nothing(m_robotDrive);
+        }
+
+    }
 }

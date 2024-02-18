@@ -10,6 +10,7 @@ import com.revrobotics.CANSparkBase.ControlType;
 import com.revrobotics.CANSparkLowLevel.MotorType;
 
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 import frc.robot.Constants.ManipConstants;
 
@@ -39,6 +40,7 @@ public class ShooterSubsystem extends SubsystemBase {
         // m_shootPIDController.setReference(0, ControlType.kVelocity);
         m_shootMotor.set(0);
         m_shootMotor2.set(0);
+        m_angleMotor.stopMotor();
     }
     public void runAmp(){
         // m_shootPIDController.setReference(0.5, ControlType.kVelocity);
@@ -60,7 +62,6 @@ public class ShooterSubsystem extends SubsystemBase {
     public void angleShooterFar(){
         m_request = new PositionVoltage(33);
         m_angleMotor.setControl(m_request);
-
     }
   
 }

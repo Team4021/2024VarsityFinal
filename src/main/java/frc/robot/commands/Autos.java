@@ -29,7 +29,7 @@ public final class Autos {
     new ShootForTime(m_shoot, m_intake, m_inter, 2)
     );
   }
-  public static Command turnAuto(DriveSubsystem m_drive, IntakeSubsystem m_intake, IntermediateSubsystem m_inter, ShooterSubsystem m_shoot, DigitalInput m_limitSwitch){
+  public static Command turnAutoBlue(DriveSubsystem m_drive, IntakeSubsystem m_intake, IntermediateSubsystem m_inter, ShooterSubsystem m_shoot, DigitalInput m_limitSwitch){
     return Commands.sequence(
     new ShootForTime(m_shoot, m_intake, m_inter, 1.5),
     new DriveForTime(m_drive, 0.4, 0, 0, 0.5),
@@ -46,6 +46,28 @@ public final class Autos {
     new ShootForTime(m_shoot, m_intake, m_inter, 2)
     );
   }
+  public static Command nothing(DriveSubsystem m_drive){
+    return Commands.sequence(
+      new DriveForTime(m_drive, 0.3, 0, 0, 1)
+    );
+  }
+    public static Command turnAutoRed(DriveSubsystem m_drive, IntakeSubsystem m_intake, IntermediateSubsystem m_inter, ShooterSubsystem m_shoot, DigitalInput m_limitSwitch){
+    return Commands.sequence(
+    new ShootForTime(m_shoot, m_intake, m_inter, 1.5),
+    new DriveForTime(m_drive, 0.4, 0, 0, 0.5),
+    new IntakeForTime(m_intake, m_inter, 1, m_limitSwitch),
+    new DriveForTime(m_drive, 0, 0, 0, 0),
+    new DriveForTime(m_drive, -0.4, 0, 0, 1),
+    new DriveForTime(m_drive, 0, 0, 0, 0),
+    new ShootForTime(m_shoot, m_intake, m_inter, 1.5),
+    new DriveForTime(m_drive, 0.3, 0, 0.26, 1),
+    new DriveForTime(m_drive, 0, 0.26, 0, 1),
+    new IntakeForTime(m_intake, m_inter, 1, m_limitSwitch),
+    new DriveForTime(m_drive, 0, -0.43, 0, 1.2),
+    new DriveForTime(m_drive, -0.35, 0, -0.24, 1),
+    new ShootForTime(m_shoot, m_intake, m_inter, 2)
+    );
+    }
 
   private Autos() {
   }
