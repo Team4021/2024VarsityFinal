@@ -31,11 +31,11 @@ public final class Autos {
   }
   public static Command turnAuto(DriveSubsystem m_drive, IntakeSubsystem m_intake, IntermediateSubsystem m_inter, ShooterSubsystem m_shoot, DigitalInput m_limitSwitch){
     return Commands.sequence(
-    new ShootForTime(m_shoot, m_intake, m_inter, 2),
-    new DriveForTime(m_drive, 0.2, 0, 0, 0.5),
-    new IntakeForTime(m_intake, m_inter, 2, m_limitSwitch),
+    new ShootForTime(m_shoot, m_intake, m_inter, 1.5),
+    new DriveForTime(m_drive, 0.4, 0, 0, 0.5),
+    new IntakeForTime(m_intake, m_inter, 1, m_limitSwitch),
     new DriveForTime(m_drive, 0, 0, 0, 0),
-    new DriveForTime(m_drive, -0.2, 0, 0, 2.5),
+    new DriveForTime(m_drive, -0.4, 0, 0, 1),
     new DriveForTime(m_drive, 0, 0, 0, 0),
     new ShootForTime(m_shoot, m_intake, m_inter, 1.5),
     new DriveForTime(m_drive, 0.3, 0, -0.26, 1),
@@ -45,7 +45,7 @@ public final class Autos {
     new DriveForTime(m_drive, -0.35, 0, 0.24, 1),
     new ShootForTime(m_shoot, m_intake, m_inter, 2)
     );
-  
+  }
 
   private Autos() {
   }
