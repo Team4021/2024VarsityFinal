@@ -183,6 +183,6 @@ public final class Constants {
     public static final int kIntermediate = 35;
     public static final int kIntermediate2 = 37;
 
-    public static final int kWristMotor = 31;
+    public static final int kWristMotor = 40;
   }
 }

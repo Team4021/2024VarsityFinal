@@ -18,7 +18,7 @@ public class IntakeSubsystem extends SubsystemBase {
 
     public void configIntakeMotor(){
         m_intakeMotor.restoreFactoryDefaults();
-        m_intakeMotor.setIdleMode(CANSparkBase.IdleMode.kCoast);
+        m_intakeMotor.setIdleMode(CANSparkBase.IdleMode.kBrake);
         // m_intakePIDController = m_intakeMotor.getPIDController();
         // m_intakePIDController.setP(ManipConstants.kIntakeP);
         // m_intakePIDController.setI(ManipConstants.kIntakeI);

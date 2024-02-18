@@ -240,7 +240,7 @@ public class DriveSubsystem extends SubsystemBase {
 
   /** Zeroes the heading of the robot. */
   public void zeroHeading() {
-    m_gyro.setYaw(0);
+    m_gyro.setYaw(180);
   }
 
   /**
