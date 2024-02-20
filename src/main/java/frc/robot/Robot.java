@@ -4,8 +4,6 @@
 
 package frc.robot;
 
-import edu.wpi.first.cameraserver.CameraServer;
-import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
@@ -20,8 +18,6 @@ import edu.wpi.first.wpilibj2.command.CommandScheduler;
  */
 public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
-
-  // UsbCamera limelight3;
 
   private RobotContainer m_robotContainer;
   public final SendableChooser<String> m_chooser = new SendableChooser<>();
@@ -44,7 +40,6 @@ public class Robot extends TimedRobot {
     SmartDashboard.putData("Auto choices", m_chooser);
 
     // m_robotContainer.m_robotDrive.resetAbsolute();
-    // limelight3 = CameraServer.startAutomaticCapture();
   }
 
   /**
