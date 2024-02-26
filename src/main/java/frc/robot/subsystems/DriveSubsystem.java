@@ -4,6 +4,7 @@
 
 package frc.robot.subsystems;
 
+import edu.wpi.first.math.controller.ProfiledPIDController;
 import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
@@ -12,14 +13,19 @@ import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
 import edu.wpi.first.math.kinematics.SwerveModuleState;
+import edu.wpi.first.math.util.Units;
 import edu.wpi.first.util.WPIUtilJNI;
+import edu.wpi.first.wpilibj.DriverStation;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import frc.robot.Constants.DriveConstants;
+import frc.robot.Constants.OIConstants;
 import frc.utils.SwerveUtils;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import com.ctre.phoenix6.StatusSignal;
 import com.ctre.phoenix6.hardware.Pigeon2;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.util.HolonomicPathFollowerConfig;
 
 public class DriveSubsystem extends SubsystemBase {
   // Create SwerveModules
@@ -54,6 +60,11 @@ public class DriveSubsystem extends SubsystemBase {
   // The gyro sensor
   private final Pigeon2 m_gyro = new Pigeon2(30);
 
+  // Motion profiling
+  private final ProfiledPIDController m_smoothSteerController = new ProfiledPIDController(
+    DriveConstants.kHeadingP, DriveConstants.kHeadingI, DriveConstants.kHeadingD, DriveConstants.kHeadingControllerConstraints);
+
+
   // Slew rate filter variables for controlling lateral acceleration
   private double m_currentRotation = 0.0;
   private double m_currentTranslationDir = 0.0;
@@ -78,6 +89,32 @@ public class DriveSubsystem extends SubsystemBase {
   /** Creates a new DriveSubsystem. */
   public DriveSubsystem() {
     zeroHeading();
+
+        // AutoBuilder.configureHolonomic(
+        //     this::getPose, // Robot pose supplier
+        //     this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
+        //     this::, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
+        //     this::ChassisSpeeds, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+        //     new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
+        //             new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
+        //             new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
+        //             4.5, // Max module speed, in m/s
+        //             0.4, // Drive base radius in meters. Distance from robot center to furthest module.
+        //             new ReplanningConfig() // Default path replanning config. See the API for the options here
+        //     ),
+        //     () -> {
+        //       // Boolean supplier that controls when the path will be mirrored for the red alliance
+        //       // This will flip the path being followed to the red side of the field.
+        //       // THE ORIGIN WILL REMAIN ON THE BLUE SIDE
+
+        //       var alliance = DriverStation.getAlliance();
+        //       if (alliance.isPresent()) {
+        //         return alliance.get() == DriverStation.Alliance.Red;
+        //       }
+        //       return false;
+        //     },
+        //     this // Reference to this subsystem to set requirements
+    // );
   }
 
   @Override
@@ -136,10 +173,9 @@ public class DriveSubsystem extends SubsystemBase {
    */
   public void drive(double xSpeed, double ySpeed, double rot, boolean fieldRelative, boolean rateLimit) {
     
-    SmartDashboard.putNumber("xSpeed", ySpeed);
-
     double xSpeedCommanded;
     double ySpeedCommanded;
+    SmartDashboard.putNumber("gyro", m_gyro.getYaw().getValueAsDouble());
 
     if (rateLimit) {
       // Convert XY to polar for rate limiting
@@ -206,6 +242,50 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.setDesiredState(swerveModuleStates[2]);
   }
 
+  // public void headingDrive(double xSpeed, double ySpeed, double desiredAngle, boolean fieldRelative) {
+  //   double currentAngle = Math.abs(this.m_gyro.getYaw().getValueAsDouble() % 360);
+  //   SmartDashboard.putNumber("currentAngle", currentAngle);
+  //   SmartDashboard.putNumber("gyroangle", m_gyro.getYaw().getValueAsDouble());
+  
+  //   if (this.m_gyro.getYaw().getValueAsDouble() < 0) currentAngle = 360 - currentAngle;
+
+  //   // Calculate theta difference between current and desired
+  //   desiredAngle = (Units.radiansToDegrees(desiredAngle) + DriveConstants.kSwerveTargetingOffset) % 360;
+
+  //   SmartDashboard.putNumber("desiredAngle", desiredAngle);
+
+  //   // Then calculate the shortest direction to take from current to desired
+  //   double theta = Math.abs(desiredAngle - currentAngle) % 360;
+  //   double thetaShortened = theta > 180 ? 360 - theta : theta;
+
+  //   //Calculate Corrective Action
+  //   double sign = -1;
+  //   if (currentAngle - desiredAngle >= 0 && currentAngle - desiredAngle <= 180) {
+  //     sign = 1;
+  //   } else if (currentAngle - desiredAngle <= -180 && currentAngle - desiredAngle >= -360) {
+  //     sign = 1;
+  //   }
+  //   double correctiveTheta = thetaShortened * sign; //Figures out which way to turn
+  //   double correctiveTurn = -this.m_smoothSteerController.calculate(correctiveTheta);
+
+  //   //Send the drive speed to the main drive method
+  //   this.drive(xSpeed, ySpeed, correctiveTurn, true, true);
+  // }
+
+  //   public void headingDrive(double xSpeed, double ySpeed, double xRotation, double yRotation, boolean fieldRelative) {
+  //   // Calculate theta difference between current and desired
+  //   double desiredAngle = Math.atan2(-yRotation, xRotation);
+
+  //   if (Math.abs(xRotation) < OIConstants.kJoystickDeadband && Math.abs(yRotation) < OIConstants.kJoystickDeadband) {
+  //     this.drive(xSpeed, ySpeed, 0.0, true, true);
+  //     return;
+  //   };
+
+  //   //Send the drive speed to the main drive method
+  //   this.headingDrive(xSpeed, ySpeed, desiredAngle, true);
+  // }
+
+
   /**
    * Sets the wheels into an X formation to prevent movement.
    */
@@ -258,8 +338,8 @@ public class DriveSubsystem extends SubsystemBase {
    * @return The turn rate of the robot, in degrees per second
    */
   public double getTurnRate() {
-    StatusSignal<Double> m_AngVelZ = m_gyro.getAngularVelocityZDevice();
-    return m_AngVelZ.getValue() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+    // StatusSignal<Double> m_AngVelZ = m_gyro.getAngularVelocityZDevice();
+    return m_gyro.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
   }
   public void resetAbsolute(){
     m_frontLeft.resetToAbsolutePosition();

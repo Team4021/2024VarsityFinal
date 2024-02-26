@@ -5,9 +5,9 @@
 package frc.robot;
 
 import frc.robot.Constants.OIConstants;
-import frc.robot.commands.Autos;
 import frc.robot.commands.Intake;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.Autos.Autos;
 import frc.robot.subsystems.*;
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -35,6 +35,7 @@ public class RobotContainer {
   public final LimelightNotes m_limelightNotes = new LimelightNotes();
   public final IntermediateSubsystem m_inter = new IntermediateSubsystem();
   public static DigitalInput m_limitSwitch = new DigitalInput(0);
+  public final Dashboard m_dashboard = new Dashboard(m_limitSwitch);
 
   // Joysticks
   private final CommandJoystick m_strafeController =
@@ -91,7 +92,9 @@ private final JoystickButton m_rightTrigger =
               -MathUtil.applyDeadband(m_strafeController.getY(), OIConstants.kJoystickDeadband),
               MathUtil.applyDeadband(m_strafeController.getX(), OIConstants.kJoystickDeadband),
               -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
-              true, true),
+            //   -MathUtil.applyDeadband(-m_turnController.getY(), OIConstants.kJoystickDeadband),
+              true,
+              true),
           m_robotDrive));
     m_intake.setDefaultCommand(
         new RunCommand(
@@ -110,6 +113,11 @@ private final JoystickButton m_rightTrigger =
             () -> m_inter.noRunIntermediate(), m_inter
         )
     );
+    m_dashboard.setDefaultCommand(
+        new RunCommand(
+            () -> m_dashboard.pushToDashboard(), m_dashboard
+        )
+    );
   }
 
   /**
@@ -122,24 +130,31 @@ private final JoystickButton m_rightTrigger =
    * joysticks}.
    */
   private void configureBindings() {
-    m_leftButton3.whileTrue(new RunCommand(
+    m_leftButton2.whileTrue(new RunCommand(
         () -> m_robotDrive.setX(),
         m_robotDrive));
     m_rightButton3.whileTrue(new Intake(m_inter, m_intake, m_limitSwitch));
     // m_rightButton3.whileTrue(new RunCommand(
-    //     () -> m_robotDrive.drive(
-    //           m_limelightNotes.changeYSpeed(-MathUtil.applyDeadband(m_strafeController.getY(), OIConstants.kJoystickDeadband)),
-    //           m_limelightNotes.changeXspeed(MathUtil.applyDeadband(m_strafeController.getX(), OIConstants.kJoystickDeadband)),
-    //           -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
-    //           false, true),
-    //       m_robotDrive));
+    // () -> m_robotDrive.drive(
+    //     MathUtil.applyDeadband(m_strafeController.getY(), OIConstants.kJoystickDeadband),
+    //     MathUtil.applyDeadband(m_strafeController.getX(), OIConstants.kJoystickDeadband),
+    //     -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
+    //     false, true),
+    // m_robotDrive));
+    m_rightButton3.whileTrue(new RunCommand(
+        () -> m_robotDrive.drive(
+              MathUtil.applyDeadband(m_strafeController.getY(), OIConstants.kJoystickDeadband),
+              m_limelightNotes.changeXspeed(MathUtil.applyDeadband(m_strafeController.getX(), OIConstants.kJoystickDeadband), m_limitSwitch),
+              -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
+              false, true),
+          m_robotDrive));
     // m_rightTrigger.whileTrue(new Shoot(m_shoot, m_inter, m_intake));
          //       .andThen(new RunCommand(
         // () -> m_shoot.intermediate(),
         // m_shoot))
-    m_rightTrigger.whileTrue(new RunCommand(() -> m_shoot.shoot(1), m_shoot)
+    m_rightTrigger.whileTrue(new RunCommand(() -> m_shoot.shoot(0.7), m_shoot)
         .withTimeout(1)
-        .andThen(new RunCommand(() -> m_inter.runIntermediate(1), m_inter))
+        .andThen(new RunCommand(() -> m_inter.runIntermediate(0.7), m_inter))
         .andThen(new RunCommand(() -> m_intake.runIntake(0.3), m_intake)));
     m_leftButton6.whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 

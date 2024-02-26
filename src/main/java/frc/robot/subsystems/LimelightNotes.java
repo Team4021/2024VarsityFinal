@@ -3,6 +3,7 @@ package frc.robot.subsystems;
 import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.networktables.NetworkTableInstance;
+import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
@@ -14,7 +15,12 @@ public class LimelightNotes extends SubsystemBase{
     NetworkTableEntry ta = table.getEntry("ta");
     NetworkTableEntry tv = table.getEntry("tv");
 
+    public double kP = -0.01;
+    private DigitalInput m_limitSwitch;
+    boolean linedUp = false;
 
+    public LimelightNotes() {
+    }
     public double getX(){
         double x = tx.getDouble(0.0);
         return x;
@@ -38,38 +44,53 @@ public class LimelightNotes extends SubsystemBase{
     }
 
     public void defaultCommand(){
-        SmartDashboard.putNumber("XValue", getX());
+        // SmartDashboard.putNumber("XValue", getX());
         SmartDashboard.putBoolean("isNote?", isNote());
+        linedUp = false;
     }
 
-    public double changeYSpeed(double inputSpeed){
-        double outputYSpeed;
-        if (isNote()==true){
-            if (getX()<-10){
-                outputYSpeed = 0.5;
-            } else if (getX()>10){
-                outputYSpeed = 0.5;
-            } else{
-                outputYSpeed = 1;
-            }
-        } else{
-            outputYSpeed = inputSpeed;
-        }
+    // public double changeYSpeed(double inputSpeed){
+    //     double outputYSpeed;
+    //     if (isNote()==true){
+    //         if (getX()<-10){
+    //             outputYSpeed = 0.5;
+    //         } else if (getX()>10){
+    //             outputYSpeed = 0.5;
+    //         } else{
+    //             outputYSpeed = 1;
+    //         }
+    //     } else{
+    //         outputYSpeed = inputSpeed;
+    //     }
 
-        return outputYSpeed;
-    }
+    //     return outputYSpeed;
+    // }
 
-    public double changeXspeed(double inputSpeed){
+    public double changeXspeed(double inputSpeed, DigitalInput limitSwtich){
         double outputXSpeed;
-        if (isNote()==true){
-            if (getX()<-10){
-                outputXSpeed = -1;
-            } else if (getX()>10){
-                outputXSpeed = 1;
-            } else{
+
+        SmartDashboard.putBoolean("linedUp", linedUp);
+        SmartDashboard.putNumber("x", getX());
+        this.m_limitSwitch =  limitSwtich;
+        if (isNote()==true && m_limitSwitch.get()==false){
+            if (linedUp==false){
+                if (getX()<-1){
+                    outputXSpeed = getX() * kP;
+
+                } else if (getX()>1){
+                    outputXSpeed = getX() * kP;
+                } else{
+                    outputXSpeed = 0;
+                    linedUp = true;
+                }
+            } else {
                 outputXSpeed = 0;
             }
-        } else{
+        // } else if (m_limitSwitch.get()==true){
+        //     outputXSpeed = inputSpeed;
+        //     linedUp = false;
+        }
+        else{
             outputXSpeed = inputSpeed;
         }
 

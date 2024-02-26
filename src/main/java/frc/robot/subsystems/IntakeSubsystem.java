@@ -14,7 +14,6 @@ public class IntakeSubsystem extends SubsystemBase {
 
     CANSparkFlex m_intakeMotor = new CANSparkFlex(ManipConstants.kIntakeMotor, MotorType.kBrushless);
     // private SparkPIDController m_intakePIDController;
-    public double m_intakeSpeed;
 
     public void configIntakeMotor(){
         m_intakeMotor.restoreFactoryDefaults();
@@ -30,8 +29,6 @@ public class IntakeSubsystem extends SubsystemBase {
     public void noRunIntake(){
         // m_intakePIDController.setReference(0, ControlType.kVelocity);
         m_intakeMotor.set(0);
-        m_intakeSpeed = (0.0);
-
     }
     public void runIntake(double speed){
 
