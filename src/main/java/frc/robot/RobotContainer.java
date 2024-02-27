@@ -10,6 +10,9 @@ import frc.robot.commands.Shoot;
 import frc.robot.commands.TrackingIntake;
 import frc.robot.commands.Autos.Autos;
 import frc.robot.subsystems.*;
+
+import com.pathplanner.lib.commands.PathPlannerAuto;
+
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.DigitalInput;
@@ -148,10 +151,7 @@ private final JoystickButton m_rightTrigger =
          //       .andThen(new RunCommand(
         // () -> m_shoot.intermediate(),
         // m_shoot))
-    m_rightTrigger.whileTrue(new RunCommand(() -> m_shoot.shoot(0.7), m_shoot)
-        .withTimeout(0.3)
-        .andThen(new RunCommand(() -> m_inter.runIntermediate(0.7), m_inter))
-        .andThen(new RunCommand(() -> m_intake.runIntake(0.3), m_intake)));
+    m_rightTrigger.whileTrue(new Shoot(m_shoot, m_inter, m_intake));
     m_leftTrigger.whileTrue(new RunCommand(
           () -> m_robotDrive.drive(
               MathUtil.applyDeadband(m_strafeController.getY(), OIConstants.kJoystickDeadband),
@@ -195,8 +195,8 @@ private final JoystickButton m_rightTrigger =
             return Autos.turnAutoBlue(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
         } else if(m_chooser == "ThreeRed"){
             return Autos.turnAutoRed(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
-        // } else if(m_chooser == "CableSide"){
-        // return Autos.longDriveAuto(m_robotDrive, m_armSub, m_intakeSub);
+        } else if(m_chooser == "New Auto"){
+            return new PathPlannerAuto("New Auto");
         } else{
             return Autos.nothing(m_robotDrive);
         }
