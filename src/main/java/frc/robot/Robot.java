@@ -38,7 +38,6 @@ public class Robot extends TimedRobot {
     m_chooser.addOption("Three Note Red", "ThreeRed");
     m_chooser.addOption("Nothing", "Nothing");
     SmartDashboard.putData("Auto choices", m_chooser);
-
     // m_robotContainer.m_robotDrive.resetAbsolute();
   }
 
@@ -56,6 +55,8 @@ public class Robot extends TimedRobot {
     // and running subsystem periodic() methods.  This must be called from the robot's periodic
     // block in order for anything in the Command-based framework to work.
     CommandScheduler.getInstance().run();
+    m_robotContainer.m_shoot.resetToAbsolutePosition();
+
     // SmartDashboard.putBoolean("Note in Intake", m_robotContainer.m_limitSwitch.get());
     }
 

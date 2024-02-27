@@ -15,9 +15,9 @@ public class LimelightNotes extends SubsystemBase{
     NetworkTableEntry ta = table.getEntry("ta");
     NetworkTableEntry tv = table.getEntry("tv");
 
-    public double kP = -0.01;
+    public double kP = -0.025;
     private DigitalInput m_limitSwitch;
-    boolean linedUp = false;
+    public boolean linedUp = false;
 
     public LimelightNotes() {
     }
@@ -46,7 +46,7 @@ public class LimelightNotes extends SubsystemBase{
     public void defaultCommand(){
         // SmartDashboard.putNumber("XValue", getX());
         SmartDashboard.putBoolean("isNote?", isNote());
-        linedUp = false;
+        // linedUp = false;
     }
 
     // public double changeYSpeed(double inputSpeed){
@@ -74,10 +74,10 @@ public class LimelightNotes extends SubsystemBase{
         this.m_limitSwitch =  limitSwtich;
         if (isNote()==true && m_limitSwitch.get()==false){
             if (linedUp==false){
-                if (getX()<-1){
+                if (getX()<-0.5){
                     outputXSpeed = getX() * kP;
 
-                } else if (getX()>1){
+                } else if (getX()>0.5){
                     outputXSpeed = getX() * kP;
                 } else{
                     outputXSpeed = 0;
@@ -95,6 +95,9 @@ public class LimelightNotes extends SubsystemBase{
         }
 
         return outputXSpeed;
+    }
+    public void noLinedUp(){
+        linedUp = false;
     }
 
 }

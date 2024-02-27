@@ -1,7 +1,11 @@
 package frc.robot.subsystems;
 
+import com.ctre.phoenix6.configs.ClosedLoopGeneralConfigs;
 import com.ctre.phoenix6.configs.FeedbackConfigs;
+import com.ctre.phoenix6.configs.Slot0Configs;
 import com.ctre.phoenix6.configs.SoftwareLimitSwitchConfigs;
+import com.ctre.phoenix6.configs.TalonFXConfigurator;
+import com.ctre.phoenix6.controls.PositionDutyCycle;
 import com.ctre.phoenix6.controls.PositionVoltage;
 import com.ctre.phoenix6.hardware.TalonFX;
 import com.revrobotics.CANSparkBase;
@@ -23,9 +27,11 @@ public class ShooterSubsystem extends SubsystemBase {
     CANSparkMax m_shootMotor = new CANSparkMax(ManipConstants.kShootMotor, MotorType.kBrushless);
     CANSparkMax m_shootMotor2 = new CANSparkMax(33, MotorType.kBrushless);
     TalonFX m_angleMotor = new TalonFX(ManipConstants.kWristMotor);
-    PositionVoltage m_request;
-    // SoftwareLimitSwitchConfigs m_angleLimitConfigs;
-    // FeedbackConfigs m_angleFeedbackConfigs;
+    PositionDutyCycle m_request;
+    SoftwareLimitSwitchConfigs m_angleLimitConfigs = new SoftwareLimitSwitchConfigs();
+    FeedbackConfigs m_angleFeedbackConfigs = new FeedbackConfigs();
+    Slot0Configs m_anglePID = new Slot0Configs();
+    TalonFXConfigurator m_angleConfig = m_angleMotor.getConfigurator();
     
 
 
@@ -45,16 +51,16 @@ public class ShooterSubsystem extends SubsystemBase {
         m_shootMotor.burnFlash();
         m_shootMotor2.burnFlash();
 
-        // m_angleLimitConfigs.withForwardSoftLimitEnable(true);
-        // m_angleLimitConfigs.withReverseSoftLimitEnable(true);
-        // m_angleLimitConfigs.withForwardSoftLimitThreshold(0.8366);
-        // m_angleLimitConfigs.withReverseSoftLimitThreshold(0.6466);
-        // m_angleFeedbackConfigs.withRotorToSensorRatio(256);
+        m_angleLimitConfigs.withForwardSoftLimitEnable(true);
+        m_angleLimitConfigs.withReverseSoftLimitEnable(true);
+        m_angleLimitConfigs.withForwardSoftLimitThreshold(0.8366);
+        m_angleLimitConfigs.withReverseSoftLimitThreshold(0.6466);
+        m_angleFeedbackConfigs.withSensorToMechanismRatio(256);
+        m_anglePID.kP = 4;
 
-        // m_angleMotor.getConfigurator().apply(m_angleLimitConfigs);
-        // m_angleMotor.getConfigurator().apply(m_angleFeedbackConfigs);
-        // m_angleMotor.getConfigurator().setPosition(m_absolute.getAbsolutePosition());
-
+        m_angleConfig.apply(m_anglePID);
+        m_angleConfig.apply(m_angleLimitConfigs);
+        m_angleConfig.apply(m_angleFeedbackConfigs);
     }
     public void noRunshoot(){
         // m_shootPIDController.setReference(0, ControlType.kVelocity);
@@ -62,6 +68,7 @@ public class ShooterSubsystem extends SubsystemBase {
         m_shootMotor2.set(0);
         m_angleMotor.stopMotor();
         SmartDashboard.putNumber("absoluteangle", m_absolute.getAbsolutePosition());
+        SmartDashboard.putNumber("angle",m_angleMotor.getPosition().getValueAsDouble());
     }
     public void runAmp(){
         // m_shootPIDController.setReference(0.5, ControlType.kVelocity);
@@ -77,12 +84,15 @@ public class ShooterSubsystem extends SubsystemBase {
         m_shootMotor2.set(speed);
     }
     public void angleShooterClose(){
-        m_request = new PositionVoltage(0.6466);
+        m_request = new PositionDutyCycle(0.6466);
         m_angleMotor.setControl(m_request);
     }
     public void angleShooterFar(){
-        m_request = new PositionVoltage(0.8366);
+        m_request = new PositionDutyCycle(0.8366);
         m_angleMotor.setControl(m_request);
+    }
+    public void resetToAbsolutePosition(){
+        m_angleMotor.setPosition(m_absolute.getAbsolutePosition(), 0.5);
     }
   
 }
