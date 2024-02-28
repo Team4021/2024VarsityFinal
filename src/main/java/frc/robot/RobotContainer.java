@@ -6,17 +6,22 @@ package frc.robot;
 
 import frc.robot.Constants.OIConstants;
 import frc.robot.commands.Intake;
+import frc.robot.commands.IntakeForTime;
 import frc.robot.commands.Shoot;
+import frc.robot.commands.ShootForTime;
 import frc.robot.commands.TrackingIntake;
 import frc.robot.commands.Autos.Autos;
 import frc.robot.subsystems.*;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
+import com.pathplanner.lib.auto.AutoBuilder;
+import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
 import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.RunCommand;
@@ -41,6 +46,8 @@ public class RobotContainer {
   public final IntermediateSubsystem m_inter = new IntermediateSubsystem();
   public static DigitalInput m_limitSwitch = new DigitalInput(0);
   public final Dashboard m_dashboard = new Dashboard(m_limitSwitch);
+
+    private final SendableChooser<Command> autoChooser;
 
   // Joysticks
   private final CommandJoystick m_strafeController =
@@ -85,8 +92,15 @@ private final JoystickButton m_rightTrigger =
 
   /** The container for the robot. Contains subsystems, OI devices, and commands. */
   public RobotContainer() {
-    // Configure the trigger bindings
-    configureBindings();
+      // Configure the trigger bindings
+      configureBindings();
+
+      NamedCommands.registerCommand("Shoot", new ShootForTime(m_shoot, m_intake, m_inter, 0.5).withTimeout(0.5));
+      NamedCommands.registerCommand("Intake", new IntakeForTime(m_intake, m_inter, 1, m_limitSwitch).withTimeout(1));
+    //   NamedCommands.registerCommand("null", null);
+
+      autoChooser = AutoBuilder.buildAutoChooser();
+      SmartDashboard.putData("Auto Chooser", autoChooser);
 
       // Configure default commands
     m_robotDrive.setDefaultCommand(
@@ -189,17 +203,18 @@ private final JoystickButton m_rightTrigger =
         // return Autos.exampleAuto(m_exampleSubsystem);
         // if(m_chooser == "autoBalance"){
         // return Autos.balanceAuto(m_robotDrive, m_armSub, m_intakeSub);
-        if(m_chooser == "Straight"){
-            return Autos.straightAuto(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
-        } else if(m_chooser == "ThreeBlue"){
-            return Autos.turnAutoBlue(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
-        } else if(m_chooser == "ThreeRed"){
-            return Autos.turnAutoRed(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
-        } else if(m_chooser == "New Auto"){
-            return new PathPlannerAuto("New Auto");
-        } else{
-            return Autos.nothing(m_robotDrive);
-        }
+        // if(m_chooser == "Straight"){
+        //     return Autos.straightAuto(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
+        // } else if(m_chooser == "ThreeBlue"){
+        //     return Autos.turnAutoBlue(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
+        // } else if(m_chooser == "ThreeRed"){
+        //     return Autos.turnAutoRed(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
+        // } else if(m_chooser == "New Auto"){
+        //     return new PathPlannerAuto("New Auto");
+        // } else{
+        //     return Autos.nothing(m_robotDrive);
+        // }
+        return autoChooser.getSelected();
 
     }
 }

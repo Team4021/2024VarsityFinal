@@ -9,6 +9,7 @@ import edu.wpi.first.math.filter.SlewRateLimiter;
 import edu.wpi.first.math.geometry.Pose2d;
 import edu.wpi.first.math.geometry.Rotation2d;
 import edu.wpi.first.math.kinematics.ChassisSpeeds;
+import edu.wpi.first.math.kinematics.Kinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveKinematics;
 import edu.wpi.first.math.kinematics.SwerveDriveOdometry;
 import edu.wpi.first.math.kinematics.SwerveModulePosition;
@@ -103,7 +104,7 @@ public class DriveSubsystem extends SubsystemBase {
             this::getPose, // Robot pose supplier
             this::resetOdometry, // Method to reset odometry (will be called if your auto has a starting pose)
             this::getChassisSpeeds, // ChassisSpeeds supplier. MUST BE ROBOT RELATIVE
-            this::drive, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
+            this::driveChassis, // Method that will drive the robot given ROBOT RELATIVE ChassisSpeeds
             new HolonomicPathFollowerConfig( // HolonomicPathFollowerConfig, this should likely live in your Constants class
                     new PIDConstants(5.0, 0.0, 0.0), // Translation PID constants
                     new PIDConstants(5.0, 0.0, 0.0), // Rotation PID constants
@@ -357,7 +358,18 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.resetToAbsolutePosition();
   }
   public ChassisSpeeds getChassisSpeeds(){
-    
-    return new ChassisSpeeds(xSpeedDelivered, ySpeedDelivered, rotDelivered);
+    ChassisSpeeds chassisSpeeds;
+
+    return chassisSpeeds = DriveConstants.kDriveKinematics.toChassisSpeeds(
+      m_frontLeft.getState(), m_frontRight.getState(), m_rearLeft.getState(), m_rearRight.getState());
+  }
+  public void driveChassis(ChassisSpeeds speeds){
+    var swerveModuleStates = DriveConstants.kDriveKinematics.toSwerveModuleStates(speeds);
+    SwerveDriveKinematics.desaturateWheelSpeeds(
+        swerveModuleStates, DriveConstants.kMaxSpeedMetersPerSecond);
+    m_frontLeft.setDesiredState(swerveModuleStates[1]);
+    m_frontRight.setDesiredState(swerveModuleStates[0]);
+    m_rearLeft.setDesiredState(swerveModuleStates[3]);
+    m_rearRight.setDesiredState(swerveModuleStates[2]);
   }
 }
