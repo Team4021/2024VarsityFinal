@@ -358,9 +358,7 @@ public class DriveSubsystem extends SubsystemBase {
     m_rearRight.resetToAbsolutePosition();
   }
   public ChassisSpeeds getChassisSpeeds(){
-    ChassisSpeeds chassisSpeeds;
-
-    return chassisSpeeds = DriveConstants.kDriveKinematics.toChassisSpeeds(
+    return DriveConstants.kDriveKinematics.toChassisSpeeds(
       m_frontLeft.getState(), m_frontRight.getState(), m_rearLeft.getState(), m_rearRight.getState());
   }
   public void driveChassis(ChassisSpeeds speeds){
