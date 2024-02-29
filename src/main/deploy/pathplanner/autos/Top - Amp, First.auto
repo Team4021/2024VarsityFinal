@@ -2,10 +2,10 @@
   "version": 1.0,
   "startingPose": {
     "position": {
-      "x": 1.3949707899415804,
-      "y": 5.55593454044051
+      "x": 0.8842087740672655,
+      "y": 6.5627991142987945
     },
-    "rotation": -177.6637943838102
+    "rotation": -123.02386755579657
   },
   "command": {
     "type": "sequential",
@@ -20,7 +20,7 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp side Note"
+            "pathName": "Top Amp Side Note"
           }
         },
         {
@@ -32,7 +32,31 @@
         {
           "type": "path",
           "data": {
-            "pathName": "Amp side Note return"
+            "pathName": "Top Amp Side Note Return"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "shoot"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top First Mid Note"
+          }
+        },
+        {
+          "type": "named",
+          "data": {
+            "name": "Intake"
+          }
+        },
+        {
+          "type": "path",
+          "data": {
+            "pathName": "Top First Mid Note Return"
           }
         },
         {
