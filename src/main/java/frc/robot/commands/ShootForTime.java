@@ -38,9 +38,9 @@ public class ShootForTime extends Command {
     if(counter < target){
       counter++;
     }
-    m_shoot.shoot(1);
-    if(counter > 50){
-        m_inter.runIntermediate(1);
+    m_shoot.shoot(0.7);
+    if(counter > 30){
+        m_inter.runIntermediate(0.7);
         m_intake.runIntake(0.3);
     }
   

@@ -71,8 +71,8 @@ public class DriveSubsystem extends SubsystemBase {
     double rotDelivered;
 
   // Motion profiling
-  private final ProfiledPIDController m_smoothSteerController = new ProfiledPIDController(
-    DriveConstants.kHeadingP, DriveConstants.kHeadingI, DriveConstants.kHeadingD, DriveConstants.kHeadingControllerConstraints);
+  // private final ProfiledPIDController m_smoothSteerController = new ProfiledPIDController(
+  //   DriveConstants.kHeadingP, DriveConstants.kHeadingI, DriveConstants.kHeadingD, DriveConstants.kHeadingControllerConstraints);
 
 
   // Slew rate filter variables for controlling lateral acceleration
@@ -119,7 +119,7 @@ public class DriveSubsystem extends SubsystemBase {
 
               var alliance = DriverStation.getAlliance();
               if (alliance.isPresent()) {
-                return alliance.get() == DriverStation.Alliance.Red;
+                return alliance.get() != DriverStation.Alliance.Red;
               }
               return false;
             },
@@ -138,10 +138,10 @@ public class DriveSubsystem extends SubsystemBase {
             m_rearLeft.getPosition(),
             m_rearRight.getPosition()
         });
-    m_frontLeft.encodersToDashboard("FL");
-    m_frontRight.encodersToDashboard("FR");
-    m_rearLeft.encodersToDashboard("RL");
-    m_rearRight.encodersToDashboard("RR");
+    // m_frontLeft.encodersToDashboard("FL");
+    // m_frontRight.encodersToDashboard("FR");
+    // m_rearLeft.encodersToDashboard("RL");
+    // m_rearRight.encodersToDashboard("RR");
     
   }
 

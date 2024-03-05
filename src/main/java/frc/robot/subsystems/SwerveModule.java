@@ -154,7 +154,7 @@ public class SwerveModule {
    * @param desiredState Desired state with speed and angle.
    */
   public void setDesiredState(SwerveModuleState desiredState) {
-    SmartDashboard.putNumber("encoder value", m_turningEncoder.getPosition());
+    // SmartDashboard.putNumber("encoder value", m_turningEncoder.getPosition());
     // Apply chassis angular offset to the desired state.
     SwerveModuleState correctedDesiredState = new SwerveModuleState();
     correctedDesiredState.speedMetersPerSecond = desiredState.speedMetersPerSecond;
@@ -181,7 +181,7 @@ public class SwerveModule {
     m_turningEncoder.setPosition(angle);
   }
   public void encodersToDashboard(String module){
-    SmartDashboard.putNumber(module + "absolute", m_turningAbsoluteEncoder.getAbsolutePosition().getValueAsDouble());
-    SmartDashboard.putNumber(module + "motor", m_turningEncoder.getPosition());
+    // SmartDashboard.putNumber(module + "absolute", m_turningAbsoluteEncoder.getAbsolutePosition().getValueAsDouble());
+    // SmartDashboard.putNumber(module + "motor", m_turningEncoder.getPosition());
   }
 }

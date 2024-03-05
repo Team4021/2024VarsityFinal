@@ -5,6 +5,8 @@
 package frc.robot;
 
 import frc.robot.Constants.OIConstants;
+import frc.robot.commands.AutoInter;
+import frc.robot.commands.AutoShoot;
 import frc.robot.commands.Intake;
 import frc.robot.commands.IntakeForTime;
 import frc.robot.commands.Shoot;
@@ -14,11 +16,13 @@ import frc.robot.commands.Autos.Autos;
 import frc.robot.subsystems.*;
 
 import com.pathplanner.lib.commands.PathPlannerAuto;
+
+import org.opencv.photo.Photo;
+
 import com.pathplanner.lib.auto.AutoBuilder;
 import com.pathplanner.lib.auto.NamedCommands;
 
 import edu.wpi.first.math.MathUtil;
-import edu.wpi.first.util.function.BooleanConsumer;
 import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj.GenericHID;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
@@ -41,11 +45,14 @@ public class RobotContainer {
   public final DriveSubsystem m_robotDrive = new DriveSubsystem();
   public final ShooterSubsystem m_shoot = new ShooterSubsystem();
   public final IntakeSubsystem m_intake = new IntakeSubsystem();
-  public final LimelightTags m_limelightTags = new LimelightTags();
-  public final LimelightNotes m_limelightNotes = new LimelightNotes();
+//   public final LimelightTags m_limelightTags = new LimelightTags();
+//   public final LimelightNotes m_limelightNotes = new LimelightNotes();
+
   public final IntermediateSubsystem m_inter = new IntermediateSubsystem();
   public static DigitalInput m_limitSwitch = new DigitalInput(0);
   public final Dashboard m_dashboard = new Dashboard(m_limitSwitch);
+  public final ClimberSubsystem m_climb = new ClimberSubsystem();
+//   public final PhotonNotes m_photonNotes = new PhotonNotes();
 
     private final SendableChooser<Command> autoChooser;
 
@@ -83,6 +90,12 @@ private final JoystickButton m_rightTrigger =
       new JoystickButton(m_turnGenericHID, 5);
   private final JoystickButton m_leftButton4 =
       new JoystickButton(m_strafeGenericHID, 4);
+  private final JoystickButton m_leftButton8 =
+      new JoystickButton(m_strafeGenericHID, 8);
+    private final JoystickButton m_rightButton6 =
+      new JoystickButton(m_turnGenericHID, 6);
+    private final JoystickButton m_rightButton7 =
+      new JoystickButton(m_turnGenericHID, 7);
 
   public void configMotors(){
     m_intake.configIntakeMotor();
@@ -95,8 +108,9 @@ private final JoystickButton m_rightTrigger =
       // Configure the trigger bindings
       configureBindings();
 
-      NamedCommands.registerCommand("Shoot", new ShootForTime(m_shoot, m_intake, m_inter, 0.5).withTimeout(0.5));
-      NamedCommands.registerCommand("Intake", new IntakeForTime(m_intake, m_inter, 1, m_limitSwitch).withTimeout(1));
+      NamedCommands.registerCommand("Shoot", new AutoShoot(m_shoot));
+      NamedCommands.registerCommand("Intake", new Intake(m_inter, m_intake, m_limitSwitch));
+      NamedCommands.registerCommand("Inter", new AutoInter(m_inter));
     //   NamedCommands.registerCommand("null", null);
 
       autoChooser = AutoBuilder.buildAutoChooser();
@@ -119,10 +133,10 @@ private final JoystickButton m_rightTrigger =
         new RunCommand(
             () -> m_intake.noRunIntake(),
              m_intake));
-    m_limelightNotes.setDefaultCommand(
-        new RunCommand(
-            () -> m_limelightNotes.defaultCommand(),
-            m_limelightNotes));
+    // m_noteTrack.setDefaultCommand(
+    //     new RunCommand(
+    //         () -> m_noteTrack.defaultCommand(),
+    //         m_noteTrack));
     m_shoot.setDefaultCommand(
         new RunCommand(
             () -> m_shoot.noRunshoot(), m_shoot)
@@ -136,6 +150,11 @@ private final JoystickButton m_rightTrigger =
         new RunCommand(
             () -> m_dashboard.pushToDashboard(), m_dashboard
         )
+    );
+    m_climb.setDefaultCommand(
+    new RunCommand(
+        () -> m_climb.no(), m_climb
+    )
     );
   }
 
@@ -160,7 +179,7 @@ private final JoystickButton m_rightTrigger =
     //     -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
     //     false, true),
     // m_robotDrive));
-    m_rightButton3.whileTrue(new TrackingIntake(m_robotDrive, m_limelightNotes, m_limitSwitch));
+    // m_rightButton3.whileTrue(new TrackingIntake(m_robotDrive, m_photonNotes, m_limitSwitch));
     // m_rightTrigger.whileTrue(new Shoot(m_shoot, m_inter, m_intake));
          //       .andThen(new RunCommand(
         // () -> m_shoot.intermediate(),
@@ -169,15 +188,15 @@ private final JoystickButton m_rightTrigger =
     m_leftTrigger.whileTrue(new RunCommand(
           () -> m_robotDrive.drive(
               MathUtil.applyDeadband(m_strafeController.getY(), OIConstants.kJoystickDeadband),
-            //   -MathUtil.applyDeadband(m_strafeController.getX(), OIConstants.kJoystickDeadband),
-              0,
+              -MathUtil.applyDeadband(m_strafeController.getX(), OIConstants.kJoystickDeadband),
+            //   0,
               -MathUtil.applyDeadband(-m_turnController.getX(), OIConstants.kJoystickDeadband),
               false, true),
           m_robotDrive));
     m_leftButton6.whileTrue(new RunCommand(() -> m_robotDrive.zeroHeading(), m_robotDrive));
 
         
-    m_leftButton5.whileTrue(new RunCommand(
+    m_leftButton8.whileTrue(new RunCommand(
         () -> m_robotDrive.resetAbsolute(), m_robotDrive));
     // m_leftButton7.whileTrue(new RunCommand(() -> m_shoot.angleShooter(), m_shoot));
     m_leftButton4.whileTrue(new RunCommand(
@@ -186,6 +205,9 @@ private final JoystickButton m_rightTrigger =
         () -> m_shoot.angleShooterFar(), m_shoot));
     m_leftButton7.whileTrue(new RunCommand(
         () -> m_shoot.resetToAbsolutePosition(), m_shoot));
+    m_rightButton6.whileTrue(new RunCommand(
+        () -> m_climb.up(), m_climb));
+    m_rightButton7.whileTrue(new RunCommand(() -> m_climb.down(), m_climb));
   }
 
   /**
@@ -198,7 +220,7 @@ private final JoystickButton m_rightTrigger =
 
 //     return Autos.turnAuto(m_robotDrive, m_intake, m_inter, m_shoot, m_limitSwitch);
 //   }
-    public Command getAutonomousCommand(String m_chooser) {
+    public Command getAutonomousCommand() {
         // An example command will be run in autonomous
         // return Autos.exampleAuto(m_exampleSubsystem);
         // if(m_chooser == "autoBalance"){

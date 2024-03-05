@@ -1,0 +1,414 @@
+{
+  "version": 1.0,
+  "waypoints": [
+    {
+      "anchor": {
+        "x": 0.8378285683125036,
+        "y": 4.522070061089275
+      },
+      "prevControl": null,
+      "nextControl": {
+        "x": 1.4059860888083358,
+        "y": 3.2002341970785637
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.351421900583913,
+        "y": 0.788463497830951
+      },
+      "prevControl": {
+        "x": 7.3542474768565365,
+        "y": 0.6609179320053556
+      },
+      "nextControl": {
+        "x": 9.395767366903318,
+        "y": 0.9220425691043639
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.5570145038595165,
+        "y": 1.739257715803567
+      },
+      "prevControl": {
+        "x": 4.870785276633976,
+        "y": 0.5010615014618303
+      },
+      "nextControl": {
+        "x": 6.090386870039277,
+        "y": 2.7016469852148743
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.351421900583913,
+        "y": 2.4465558535636847
+      },
+      "prevControl": {
+        "x": 7.809046287655399,
+        "y": 2.308403574798875
+      },
+      "nextControl": {
+        "x": 9.580497353085102,
+        "y": 2.759622242408326
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 4.803336160344637,
+        "y": 2.7016469852148743
+      },
+      "prevControl": {
+        "x": 4.966048685921932,
+        "y": 1.3999467805965118
+      },
+      "nextControl": {
+        "x": 4.62941038876428,
+        "y": 4.093053157857728
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.351421900583913,
+        "y": 4.116243260735109
+      },
+      "prevControl": {
+        "x": 9.731233021788077,
+        "y": 4.116243260735109
+      },
+      "nextControl": {
+        "x": 7.188212257999134,
+        "y": 4.116243260735109
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 5.5570145038595165,
+        "y": 3.8379620262065384
+      },
+      "prevControl": {
+        "x": 5.835295738388087,
+        "y": 3.223424299955944
+      },
+      "nextControl": {
+        "x": 5.305279001058331,
+        "y": 4.393877928225825
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 8.455777363532128,
+        "y": 5.890286130854748
+      },
+      "prevControl": {
+        "x": 7.127695333060701,
+        "y": 5.329285962810783
+      },
+      "nextControl": {
+        "x": 9.80080333042022,
+        "y": 6.45844365135058
+      },
+      "isLocked": false,
+      "linkedName": null
+    },
+    {
+      "anchor": {
+        "x": 6.14836212723273,
+        "y": 6.48163375422796
+      },
+      "prevControl": {
+        "x": 8.444182312093428,
+        "y": 6.446848599911887
+      },
+      "nextControl": null,
+      "isLocked": false,
+      "linkedName": null
+    }
+  ],
+  "rotationTargets": [
+    {
+      "waypointRelativePos": 1.25,
+      "rotationDegrees": 171.1768378809163,
+      "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 2.1,
+      "rotationDegrees": 157.63399385689885,
+      "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 3.25,
+      "rotationDegrees": -178.22490413440002,
+      "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 4.1000000000000005,
+      "rotationDegrees": -178.78944694634282,
+      "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 5.05,
+      "rotationDegrees": -179.24095107149452,
+      "rotateFast": true
+    },
+    {
+      "waypointRelativePos": 6.05,
+      "rotationDegrees": -174.2328899195029,
+      "rotateFast": true
+    }
+  ],
+  "constraintZones": [],
+  "eventMarkers": [
+    {
+      "name": "1st Shoot",
+      "waypointRelativePos": 1.75,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            },
+            {
+              "type": "sequential",
+              "data": {
+                "commands": [
+                  {
+                    "type": "wait",
+                    "data": {
+                      "waitTime": 0.2
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "Inter"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "1st Intake",
+      "waypointRelativePos": 0.7999999999999999,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.5
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "2nd Shoot",
+      "waypointRelativePos": 3.8500000000000005,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            },
+            {
+              "type": "sequential",
+              "data": {
+                "commands": [
+                  {
+                    "type": "wait",
+                    "data": {
+                      "waitTime": 0.2
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "Inter"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "2nd Intake",
+      "waypointRelativePos": 2.65,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.5
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "3rd Shoot",
+      "waypointRelativePos": 5.75,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "named",
+              "data": {
+                "name": "Shoot"
+              }
+            },
+            {
+              "type": "sequential",
+              "data": {
+                "commands": [
+                  {
+                    "type": "wait",
+                    "data": {
+                      "waitTime": 0.2
+                    }
+                  },
+                  {
+                    "type": "named",
+                    "data": {
+                      "name": "Inter"
+                    }
+                  }
+                ]
+              }
+            },
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.0
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "3rd Intake",
+      "waypointRelativePos": 4.55,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.5
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "4th Intake",
+      "waypointRelativePos": 6.8,
+      "command": {
+        "type": "race",
+        "data": {
+          "commands": [
+            {
+              "type": "wait",
+              "data": {
+                "waitTime": 1.5
+              }
+            },
+            {
+              "type": "named",
+              "data": {
+                "name": "Intake"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "globalConstraints": {
+    "maxVelocity": 5.0,
+    "maxAcceleration": 4.0,
+    "maxAngularVelocity": 540.0,
+    "maxAngularAcceleration": 720.0
+  },
+  "goalEndState": {
+    "velocity": 0,
+    "rotation": -176.56636963754949,
+    "rotateFast": false
+  },
+  "reversed": false,
+  "folder": null,
+  "previewStartingState": {
+    "rotation": 121.21840276434641,
+    "velocity": 0
+  },
+  "useDefaultConstraints": true
+}

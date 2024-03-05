@@ -53,8 +53,8 @@ public class ShooterSubsystem extends SubsystemBase {
 
         m_angleLimitConfigs.withForwardSoftLimitEnable(true);
         m_angleLimitConfigs.withReverseSoftLimitEnable(true);
-        m_angleLimitConfigs.withForwardSoftLimitThreshold(0.8366);
-        m_angleLimitConfigs.withReverseSoftLimitThreshold(0.6466);
+        m_angleLimitConfigs.withForwardSoftLimitThreshold(0.83);
+        m_angleLimitConfigs.withReverseSoftLimitThreshold(0.66);
         m_angleFeedbackConfigs.withSensorToMechanismRatio(256);
         m_anglePID.kP = 4;
 

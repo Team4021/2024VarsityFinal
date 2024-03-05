@@ -37,8 +37,5 @@ public class IntermediateSubsystem extends SubsystemBase{
         m_intermediate2.set(-speed);
         
     }
-
-
-
     
 }

@@ -4,11 +4,15 @@
 
 package frc.robot;
 
+import edu.wpi.first.cameraserver.CameraServer;
+import edu.wpi.first.cscore.UsbCamera;
 import edu.wpi.first.wpilibj.TimedRobot;
 import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.CommandScheduler;
+import edu.wpi.first.wpilibj2.command.RunCommand;
+import frc.robot.commands.Shoot;
 
 /**
  * The VM is configured to automatically run this class, and to call the functions corresponding to
@@ -20,7 +24,8 @@ public class Robot extends TimedRobot {
   private Command m_autonomousCommand;
 
   private RobotContainer m_robotContainer;
-  public final SendableChooser<String> m_chooser = new SendableChooser<>();
+  // public final SendableChooser<String> m_chooser = new SendableChooser<>();
+  UsbCamera cam = new UsbCamera( "cam", 1);
 
 
   /**
@@ -33,12 +38,13 @@ public class Robot extends TimedRobot {
     // autonomous chooser on the dashboard.
     m_robotContainer = new RobotContainer();
     m_robotContainer.configMotors();
-    m_chooser.setDefaultOption("Straight", "Straight");
-    m_chooser.addOption("Three Note Blue", "ThreeBlue");
-    m_chooser.addOption("Three Note Red", "ThreeRed");
-    m_chooser.addOption("Nothing", "Nothing");
-    SmartDashboard.putData("Auto choices", m_chooser);
+    // m_chooser.setDefaultOption("Straight", "Straight");
+    // m_chooser.addOption("Three Note Blue", "ThreeBlue");
+    // m_chooser.addOption("Three Note Red", "ThreeRed");
+    // m_chooser.addOption("Nothing", "Nothing");
+    // SmartDashboard.putData("Auto choices", m_chooser);
     // m_robotContainer.m_robotDrive.resetAbsolute();
+    CameraServer.startAutomaticCapture();
   }
 
   /**
@@ -72,7 +78,7 @@ public class Robot extends TimedRobot {
   /** This autonomous runs the autonomous command selected by your {@link RobotContainer} class. */
   @Override
   public void autonomousInit() {
-    m_autonomousCommand = m_robotContainer.getAutonomousCommand(m_chooser.getSelected());
+    m_autonomousCommand = m_robotContainer.getAutonomousCommand();
 
 
     // schedule the autonomous command (example)
@@ -83,7 +89,10 @@ public class Robot extends TimedRobot {
 
   /** This function is called periodically during autonomous. */
   @Override
-  public void autonomousPeriodic() {}
+  public void autonomousPeriodic() {
+    // new RunCommand(() -> m_robotContainer.m_shoot.shoot(0.7), m_robotContainer.m_shoot).schedule();
+    // new Shoot(m_robotContainer.m_shoot, m_robotContainer.m_inter, m_robotContainer.m_intake);
+  }
 
   @Override
   public void teleopInit() {
